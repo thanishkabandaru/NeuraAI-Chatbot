@@ -1,0 +1,22 @@
+# Python
+.venv/
+__pycache__/
+*.py[cod]
+
+# Environment variables
+backend/.env
+
+# SQLite database
+backend/database/chatbot.db
+
+# Node
+frontend/node_modules/
+
+# Build output
+frontend/dist/
+
+# VS Code
+.vscode/
+
+# Logs
+*.log
