@@ -252,6 +252,15 @@ http://localhost:5173
 7. User receives the generated response.
 
 ---
+# Screenshots
+
+## Chat Interface
+
+![NeuraAI Chat Interface](screenshots\1.png,screenshots\2.png)
+
+## Conversation Management
+
+![NeuraAI Conversations](screenshots\3.png,screenshots\4.png,screenshots\5.png)
 
 # Key Learning Outcomes
 
