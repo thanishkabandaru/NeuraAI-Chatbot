@@ -116,8 +116,11 @@ def get_messages(conversation_id):
 
     cursor.execute(
         """
-        SELECT role, message, created_at
-        FROM messages
+        SELECT
+    role,
+    message,
+    datetime(created_at, '+5 hours', '+30 minutes') AS created_at
+FROM messages
         WHERE conversation_id = ?
         ORDER BY created_at ASC
         """,
@@ -128,3 +131,25 @@ def get_messages(conversation_id):
     conn.close()
 
     return messages
+
+
+def update_conversation_title(conversation_id, title):
+    """Update a conversation title."""
+
+    conn = get_connection()
+    cursor = conn.cursor()
+
+    cursor.execute(
+        """
+        UPDATE conversations
+        SET title = ?
+        WHERE id = ?
+        """,
+        (title, conversation_id)
+    )
+
+    conn.commit()
+    conn.close()
+
+
+    
