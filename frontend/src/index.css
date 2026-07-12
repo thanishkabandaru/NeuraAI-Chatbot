@@ -25,3 +25,32 @@
   scrollbar-width: thin;
   scrollbar-color: #475569 #0f172a;
 }
+/* Dark scrollbar for NeuraAI */
+
+.sidebar-scroll::-webkit-scrollbar,
+section::-webkit-scrollbar {
+  width: 8px;
+}
+
+.sidebar-scroll::-webkit-scrollbar-track,
+section::-webkit-scrollbar-track {
+  background: #0f172a; /* slate-900 */
+}
+
+.sidebar-scroll::-webkit-scrollbar-thumb,
+section::-webkit-scrollbar-thumb {
+  background: #334155; /* slate-700 */
+  border-radius: 10px;
+}
+
+.sidebar-scroll::-webkit-scrollbar-thumb:hover,
+section::-webkit-scrollbar-thumb:hover {
+  background: #475569; /* slate-600 */
+}
+
+/* Firefox support */
+.sidebar-scroll,
+section {
+  scrollbar-width: thin;
+  scrollbar-color: #334155 #0f172a;
+}
