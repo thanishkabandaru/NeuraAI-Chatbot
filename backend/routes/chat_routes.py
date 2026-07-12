@@ -18,7 +18,7 @@ chat_bp = Blueprint("chat", __name__)
 @chat_bp.route("/", methods=["GET"])
 def home():
     return jsonify({
-        "message": "K-Hub Chatbot Backend is Running!"
+        "message": "NeuraAI_Chatbot Backend is Running!"
     })
 
 
@@ -87,7 +87,7 @@ def chat():
 
     # System prompt
     prompt = """
-You are K-Hub AI Chatbot.
+"You are NeuraAI, an AI-powered conversational assistant. Always introduce yourself as NeuraAI if asked who you are."
 
 Instructions:
 - Answer directly without greetings such as "Hi", "Hello", or "Certainly".
