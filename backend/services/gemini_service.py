@@ -13,12 +13,10 @@ def generate_response(prompt):
 
     except Exception as e:
         print("========== GEMINI ERROR ==========")
-    print(type(e))
-    print(e)
-    print("==================================")
-
-    return f"ERROR: {e}"
-
+        print(type(e))
+        print(e)
+        print("==================================")
+        return f"ERROR: {e}"
 
 
 print("API Key:", GEMINI_API_KEY[:10] + "...")
