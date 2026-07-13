@@ -4,6 +4,15 @@ import { FiMessageSquare } from "react-icons/fi";
 import { FiMoreVertical } from "react-icons/fi";
 import api from "./services/api";
 import { FiCpu } from "react-icons/fi";
+import { FiSearch } from "react-icons/fi";
+import { FiX } from "react-icons/fi";
+import {
+  FiEdit2,
+  FiArchive,
+  FiTrash2,
+} from "react-icons/fi";
+import { BsPinAngle } from "react-icons/bs";
+
 
 function App() {
 
@@ -15,6 +24,9 @@ function App() {
   const messagesEndRef = useRef(null);
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [menuOpen, setMenuOpen] = useState(null);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [editingChatId, setEditingChatId] = useState(null);
+  const [editingTitle, setEditingTitle] = useState("");
 
 
   useEffect(() => {
@@ -103,6 +115,32 @@ function App() {
   }
 
 
+  function renameChat(id, currentTitle) {
+  setEditingChatId(id);
+  setEditingTitle(currentTitle);
+}
+
+async function saveRename(id) {
+  const title = editingTitle.trim();
+
+  if (!title) {
+    setEditingChatId(null);
+    return;
+  }
+
+  try {
+    await api.put(`/conversations/${id}`, {
+      title,
+    });
+
+    await loadConversations();
+  } catch (error) {
+    console.error(error);
+  }
+
+  setEditingChatId(null);
+}
+
   async function sendMessage() {
 
   const text = message.trim();
@@ -166,6 +204,10 @@ function App() {
 
 }
 
+const filteredConversations = conversations.filter((conversation) =>
+  conversation.title.toLowerCase().includes(searchQuery.toLowerCase())
+);
+
   
 
 
@@ -227,9 +269,29 @@ function App() {
     No conversations yet.
   </p>
 )}
+<div className="relative mb-3">
+  <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-white/80 text-lg" />
+
+  <input
+    type="text"
+    placeholder="Search conversations..."
+    value={searchQuery}
+    onChange={(e) => setSearchQuery(e.target.value)}
+    className="bg-sky-800 hover:bg-sky-700 transition-colors duration-200 w-full rounded-lg py-3 pl-10 pr-10 font-semibold text-white placeholder-white/70 focus:outline-none"
+  />
+
+  {searchQuery && (
+    <button
+      onClick={() => setSearchQuery("")}
+      className="absolute right-3 top-1/2 -translate-y-1/2 text-white/80 hover:text-white"
+    >
+      <FiX size={18} />
+    </button>
+  )}
+</div>
 
           {
-            conversations.map(chat => (
+            filteredConversations.map(chat => (
 
               <div
   key={chat.id}
@@ -246,14 +308,35 @@ function App() {
 >
   <FiMessageSquare className="text-slate-300 text-lg" />
 
-  {sidebarOpen && (
+{sidebarOpen &&
+  (editingChatId === chat.id ? (
+    <input
+      autoFocus
+      value={editingTitle}
+      onChange={(e) => setEditingTitle(e.target.value)}
+      onBlur={() => saveRename(chat.id)}
+      onKeyDown={(e) => {
+        if (e.key === "Enter") {
+          saveRename(chat.id);
+        }
+
+        if (e.key === "Escape") {
+          setEditingChatId(null);
+        }
+      }}
+      className="ml-3 flex-1 bg-slate-600 rounded px-2 py-1 text-sm outline-none"
+    />
+  ) : (
     <span
-  className="ml-3 flex-1 truncate text-sm font-medium"
-  title={chat.title}
->
-  {chat.title}
-</span>
-  )}
+      className="ml-3 flex-1 truncate text-sm font-medium"
+      title={chat.title}
+    >
+      {chat.title}
+    </span>
+  ))
+}
+
+  
 </div>
 
 
@@ -272,34 +355,39 @@ function App() {
     {menuOpen === chat.id && (
       <div className="absolute right-0 top-8 w-48 bg-slate-800 border border-slate-700 rounded-xl shadow-2xl overflow-hidden z-50">
 
-        <button
+        
+
+<button
   onClick={() => {
+    renameChat(chat.id, chat.title);
     setMenuOpen(null);
-    // Rename logic later
   }}
   className="w-full px-4 py-3 text-left text-sm hover:bg-slate-700 transition"
 >
   ✏️ Rename
 </button>
 
-        <button
+        
+<button
   onClick={() => {
+    // Pin logic
     setMenuOpen(null);
-    // Pin logic later
   }}
-  className="w-full px-4 py-3 text-left text-sm hover:bg-slate-700 transition"
+  className="w-full px-4 py-3 text-left text-sm hover:bg-slate-700 transition flex items-center gap-2"
 >
-  📌 Pin
+  <BsPinAngle size={16} />
+  Pin
 </button>
 
-        <button
+<button
   onClick={() => {
+    // Archive logic
     setMenuOpen(null);
-    // Archive logic later
   }}
-  className="w-full px-4 py-3 text-left text-sm hover:bg-slate-700 transition"
+  className="w-full px-4 py-3 text-left text-sm hover:bg-slate-700 transition flex items-center gap-2"
 >
-  📦 Archive
+  <FiArchive size={16} />
+  Archive
 </button>
 
         <button

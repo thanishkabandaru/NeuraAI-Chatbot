@@ -51,7 +51,13 @@ def remove_conversation(conversation_id):
     })
 
 
+@chat_bp.route("/conversations/<int:id>", methods=["PUT"])
+def rename_conversation(id):
+    data = request.json
 
+    update_conversation_title(id, data["title"])
+
+    return jsonify({"message": "Conversation renamed successfully"})
 
 
 @chat_bp.route("/messages/<int:conversation_id>", methods=["GET"])
